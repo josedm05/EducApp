@@ -7,7 +7,8 @@ var Types = keystone.Field.Types;
  */
 
 var Teacher = new keystone.List('Teacher', {
-	autokey: { from: 'name', path: 'key', unique: true },
+	//map: { name: 'name' },
+	autokey: { from: '_id', path: 'key', unique: false },
 });
 
 Teacher.add({
@@ -16,6 +17,7 @@ Teacher.add({
 	telefono: { type: String },
 	correo: { type: String },
 	description: { type: String, default: '' },
+	location: { type: Types.Location, enableMapsAPI: true },
 	images: { type: Types.CloudinaryImages },
 	subjects: { type: Types.Relationship, ref: 'Subject', many: true },
 });

@@ -1,0 +1,70 @@
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 500px;
+		width: 100%;
+		position: absolute !important;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+<div class="container">
+	<h1>Mapa</h1>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-8 col-md-9">
+			<h4 class="text-weight-normal">Mostrando {{ data.posts.results.length}} profesores.</h4>
+			<div id="map"></div>
+		</div>
+		<div class="col-sm-4 col-md-3">
+			<h2>Materias</h2>
+			<div style="margin-top: 70px;" class="list-group">
+				<a href="/map" class="active list-group-item">Todas las materias</a>
+				{{# each data.categories }}
+				<a href="{{categoryUrl key}}" class="false list-group-item">{{name}}</a>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+	{{>pagination}}
+</div>
+    <script>
+		let locations = [
+		{{# each data.posts.results}}
+		{{#if location.geo}}
+		{
+			location: {
+				lng: {{ location.geo.[0] }},
+				lat: {{ location.geo.[1] }}
+			},
+			teacher: '{{name}}'
+		},
+		{{^}}
+		
+		{{/if}}
+		{{/each}}
+		]
+		console.log(locations)
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 19.230079, lng: -70.5131755},
+          zoom: 8
+        });
+		locations.forEach(val => {
+		new google.maps.Marker({
+          position: val.location,
+          map: map,
+          title: val.teacher
+        });
+		})
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRce2AH5X70xxROV2-YYouZInzKllJlxs&callback=initMap"
+    async defer></script>

@@ -17,10 +17,9 @@ exports = module.exports = function (req, res) {
 	// Load the current post
 	view.on('init', function (next) {
 
-		var q = keystone.list('Post').model.findOne({
-			state: 'published',
+		var q = keystone.list('Teacher').model.findOne({
 			slug: locals.filters.post,
-		}).populate('author categories');
+		}).populate('subjects');
 
 		q.exec(function (err, result) {
 			locals.data.post = result;
@@ -32,7 +31,7 @@ exports = module.exports = function (req, res) {
 	// Load other posts
 	view.on('init', function (next) {
 
-		var q = keystone.list('Post').model.find().where('state', 'published').sort('-publishedDate').populate('author').limit('4');
+		var q = keystone.list('Teacher').model.find().where('state', 'published').sort('-publishedDate').populate('subjects').limit('4');
 
 		q.exec(function (err, results) {
 			locals.data.posts = results;
